@@ -28,7 +28,7 @@ Modern, güvenli ve kullanıcı dostu şifre yönetim sistemi. Tüm şifrelerini
 - Python 3.7 veya üzeri
 - Windows İşletim Sistemi
 
-### Adımlar
+### Kurulum Adımlarıı
 
 1. **Projeyi İndirin**
    ```bash
@@ -172,17 +172,10 @@ WSY, kullanıcı verilerinin güvenliğini en üst seviyede tutmak için çeşit
 
 Bu proje MIT lisansı altında lisanslanmıştır.
 
-## 🤝 Katkıda Bulunma
-
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
-5. Pull Request oluşturun
-
 ## 📧 İletişim
 
 Sorularınız veya sorunlarınız için GitHub repository'sinde issue açabilirsiniz.
+Benimle iletişime de geçebilirsiniz https://www.linkedin.com/in/yusuf-duhan-%C5%9Fahin-a2b406352/ :)
 
 ## 🙏 Teşekkürler
 
@@ -193,4 +186,5 @@ Sorularınız veya sorunlarınız için GitHub repository'sinde issue açabilirs
 ---
 
 **Not**: Bu uygulama geliştirme amaçlıdır. Production kullanımı için ek güvenlik önlemleri alınması önerilir.
+
 
