@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSY - Web Şifre Yöneticisi Tanıtım</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2a2a72 0%, #009ffd 74%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #009ffd;
+        }
+
+        header h1 {
+            font-size: 42px;
+            color: #2a2a72;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header h1 i {
+            color: #f1c40f;
+        }
+
+        header p {
+            font-size: 20px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 28px;
+            color: #2a2a72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #009ffd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 i {
+            color: #009ffd;
+        }
+
+        .section p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #009ffd;
+        }
+
+        .feature-card i {
+            font-size: 40px;
+            color: #009ffd;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: #2a2a72;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #009ffd 0%, #2a2a72 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .installation-steps {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #009ffd;
+        }
+
+        .installation-steps ol {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .installation-steps li {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .installation-steps code {
+            background: #2a2a72;
+            color: #f1c40f;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #009ffd 0%, #2a2a72 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 159, 253, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f1c40f 0%, #d4af0a 100%);
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(241, 196, 15, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f1c40f 0%, #d4af0a 100%);
+            color: #1a1a1a;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 32px;
+                flex-direction: column;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <i class="fas fa-shield-alt"></i>
+                WSY - Web Şifre Yöneticisi
+            </h1>
+            <p>Güvenli, Modern ve Kullanıcı Dostu Şifre Yönetim Sistemi</p>
+        </header>
+
+        <section class="section">
+            <h2><i class="fas fa-info-circle"></i> Proje Hakkında</h2>
+            <p>
+                <span class="highlight">WSY (Web Şifre Yöneticisi)</span>, kullanıcıların tüm şifrelerini güvenli bir şekilde saklamasına ve yönetmesine olanak tanıyan modern bir web uygulamasıdır. 
+                Uygulama, end-to-end şifreleme teknolojisi kullanarak kullanıcı verilerinin güvenliğini en üst seviyede tutar.
+            </p>
+            <p>
+                Flask framework'ü ile geliştirilen bu uygulama, SQLite veritabanı kullanarak yerel veri saklama sağlar. 
+                Tüm şifreler, kullanıcının ana şifresi ile türetilen anahtarlar kullanılarak şifrelenir ve sadece kullanıcı tarafından çözülebilir.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-star"></i> Özellikler</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>Güvenli Şifreleme</h3>
+                    <p>Fernet şifreleme algoritması ile end-to-end şifreleme. Tüm şifreleriniz güvende.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-key"></i>
+                    <h3>Kolay Yönetim</h3>
+                    <p>Şifrelerinizi kategorilere ayırın, düzenleyin ve kolayca bulun. Kullanıcı dostu arayüz.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Güvenli Saklama</h3>
+                    <p>Yerel SQLite veritabanı ile verileriniz sadece sizin bilgisayarınızda saklanır.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Hesap Güvenliği</h3>
+                    <p>Yanlış giriş denemelerine karşı hesap kilitleme sistemi. Güvenliğiniz öncelikli.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tags"></i>
+                    <h3>Kategori Sistemi</h3>
+                    <p>Şifrelerinizi kategorilere ayırarak düzenli bir şekilde yönetin (Sosyal Medya, Banka, E-posta vb.)</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-key"></i>
+                    <h3>Şifre Sıfırlama</h3>
+                    <p>3 farklı kurtarma yöntemi ile güvenli şifre sıfırlama: Güvenlik soruları, kurtarma anahtarı ve anahtar dosyası.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Anlık Kullanıcı Adı Kontrolü</h3>
+                    <p>Kayıt sırasında kullanıcı adının müsait olup olmadığını anında kontrol edin. Gerçek zamanlı geri bildirim.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Otomatik Migration</h3>
+                    <p>Veritabanı şeması otomatik olarak güncellenir. Manuel işlem gerektirmez.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-magic"></i>
+                    <h3>Şifre Oluşturucu</h3>
+                    <p>Güçlü ve rastgele şifreler oluşturun. Özelleştirilebilir uzunluk ve karakter setleri.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>İstatistikler</h3>
+                    <p>Şifre istatistiklerinizi görüntüleyin: Toplam şifre sayısı, kategori sayısı, güçlü/zayıf şifreler.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Arama ve Filtreleme</h3>
+                    <p>Şifrelerinizi kolayca bulun: Site adı, kategori ve güç seviyesine göre filtreleme.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-download"></i>
+                    <h3>Dışa/İçe Aktarma</h3>
+                    <p>Şifrelerinizi JSON formatında dışa aktarın ve yedekleyin. İstediğiniz zaman geri yükleyin.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Şifre Gücü Analizi</h3>
+                    <p>Şifrelerinizin gücünü analiz edin ve güvenli şifreler oluşturun.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-code"></i> Teknolojiler</h2>
+            <p>Bu proje aşağıdaki teknolojiler ve kütüphaneler kullanılarak geliştirilmiştir:</p>
+            <div class="tech-stack">
+                <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+                <span class="tech-badge"><i class="fas fa-fire"></i> Flask</span>
+                <span class="tech-badge"><i class="fas fa-database"></i> SQLite</span>
+                <span class="tech-badge"><i class="fas fa-lock"></i> Cryptography</span>
+                <span class="tech-badge"><i class="fab fa-html5"></i> HTML5</span>
+                <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</span>
+                <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+                <span class="tech-badge"><i class="fas fa-key"></i> Flask-Login</span>
+                <span class="tech-badge"><i class="fas fa-shield-alt"></i> Flask-SQLAlchemy</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-download"></i> Kurulum</h2>
+            <p>WSY'yi bilgisayarınıza kurmak için aşağıdaki adımları izleyin:</p>
+            <div class="installation-steps">
+                <ol>
+                    <li>Projeyi GitHub'dan indirin veya ZIP olarak indirin.</li>
+                    <li>Proje klasörünü açın ve <code>kurulum.bat</code> dosyasını çalıştırın.</li>
+                    <li>Kurulum scripti otomatik olarak:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Python'un yüklü olup olmadığını kontrol eder</li>
+                            <li>Virtual environment oluşturur</li>
+                            <li>Gerekli bağımlılıkları yükler</li>
+                            <li>Gerekli tüm dosyaları hazırlar</li>
+                        </ul>
+                    </li>
+                    <li>Kurulum tamamlandıktan sonra proje klasöründeki <code>WSY.bat</code> dosyasını çalıştırarak uygulamayı başlatın.</li>
+                    <li>Tarayıcınızda <code>http://127.0.0.1:5000</code> adresinde uygulama açılacaktır.</li>
+                    <li>Masaüstüne kısayol oluşturmak için <code>WSY.bat</code> dosyasına sağ tıklayıp "Gönder" &gt; "Masaüstü (kısayol oluştur)" seçeneğini kullanabilirsiniz.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-user-plus"></i> İlk Kullanım</h2>
+            <p>
+                İlk kullanımda yeni bir hesap oluşturmanız gerekmektedir. Kayıt işlemi sırasında:
+            </p>
+            <ul style="margin-left: 20px; color: #555; margin-top: 15px;">
+                <li><strong>Kullanıcı Adı:</strong> Bir kullanıcı adı seçin (en az 3 karakter). Sistem otomatik olarak müsait olup olmadığını kontrol eder ve anlık geri bildirim sağlar.</li>
+                <li><strong>E-posta:</strong> E-posta adresinizi girin</li>
+                <li><strong>Ana Şifre:</strong> Güçlü bir ana şifre oluşturun (min. 8 karakter). Bu şifre tüm şifrelerinizi çözmek için kullanılacak.</li>
+                <li><strong>Şifre Sıfırlama Yöntemi Seçin:</strong> En az bir kurtarma yöntemi seçmelisiniz:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>Güvenlik Soruları:</strong> 3 güvenlik sorusu seçin ve cevaplayın</li>
+                        <li><strong>Kurtarma Anahtarı:</strong> Benzersiz bir kurtarma anahtarı alın (format: <code>XXXX-XXXX-XXXX-XXXX</code>)</li>
+                        <li><strong>Anahtar Dosyası:</strong> Güvenli bir JSON dosyası indirin</li>
+                    </ul>
+                </li>
+                <li>Kayıt işlemini tamamlayın ve kurtarma bilgilerinizi kaydedin</li>
+                <li>Giriş yapın ve şifrelerinizi yönetmeye başlayın</li>
+            </ul>
+            <p style="margin-top: 15px;">
+                <strong>Önemli:</strong> Ana şifrenizi ve kurtarma bilgilerinizi güvenli bir yerde saklayın! 
+                Şifrenizi unuttuğunuzda kurtarma yöntemlerinizle şifrenizi sıfırlayabilirsiniz.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-key"></i> Şifre Sıfırlama Sistemi</h2>
+            <p>
+                WSY, şifrenizi unuttuğunuzda hesabınıza erişmenizi sağlayan <strong>3 farklı kurtarma yöntemi</strong> sunar. 
+                Kayıt sırasında en az bir yöntem seçmelisiniz, isterseniz hepsini seçebilirsiniz.
+            </p>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid #009ffd;">
+                <h3 style="color: #2a2a72; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-question-circle" style="color: #009ffd;"></i>
+                    1. Güvenlik Soruları
+                </h3>
+                <p style="color: #555; margin-bottom: 15px;">
+                    Kayıt sırasında 3 güvenlik sorusu seçin ve cevaplayın. Şifre sıfırlama sırasında <strong>tüm 3 soruyu doğru cevaplamanız</strong> gerekir.
+                </p>
+                <ul style="margin-left: 20px; color: #555;">
+                    <li>Cevaplar büyük/küçük harf duyarsızdır</li>
+                    <li>Her kullanıcı kendi sorularını seçer</li>
+                    <li>3 soru kategorisi mevcuttur:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>🏠 Aile ve Geçmiş:</strong> Annenizin doğduğu şehir, babanızın mesleği vb.</li>
+                            <li><strong>🧸 Çocukluk ve Okul Yılları:</strong> İlk evcil hayvanınız, çocukluk lakabınız vb.</li>
+                            <li><strong>🏆 İlk'ler ve En'ler:</strong> İlk arabanız, en sevdiğiniz film vb.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid #f1c40f;">
+                <h3 style="color: #2a2a72; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-key" style="color: #f1c40f;"></i>
+                    2. Kurtarma Anahtarı (Recovery Key)
+                </h3>
+                <p style="color: #555; margin-bottom: 15px;">
+                    Kayıt sırasında benzersiz bir kurtarma anahtarı oluşturulur. Bu anahtarı güvenli bir yerde saklayın!
+                </p>
+                <ul style="margin-left: 20px; color: #555;">
+                    <li>Format: <code>XXXX-XXXX-XXXX-XXXX</code> (16 karakter, 4 grup)</li>
+                    <li>Büyük harf ve rakamlardan oluşur</li>
+                    <li>Kayıt sonrası tek seferlik gösterilir</li>
+                    <li>Şifre sıfırlama sırasında bu anahtarı girerek şifrenizi sıfırlayabilirsiniz</li>
+                </ul>
+                <p style="color: #d35400; margin-top: 15px; font-weight: bold;">
+                    ⚠️ Bu anahtarı kaybederseniz hesabınıza erişemezsiniz!
+                </p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid #27ae60;">
+                <h3 style="color: #2a2a72; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-file-alt" style="color: #27ae60;"></i>
+                    3. Anahtar Dosyası (Key File)
+                </h3>
+                <p style="color: #555; margin-bottom: 15px;">
+                    Kayıt sırasında güvenli bir JSON dosyası oluşturulur. Bu dosyayı güvenli bir yerde saklayın!
+                </p>
+                <ul style="margin-left: 20px; color: #555;">
+                    <li>JSON formatında bir dosya oluşturulur</li>
+                    <li>Dosya adı: <code>WSY_Recovery_Key_[kullanıcıadı]_[ID].json</code></li>
+                    <li>Dosya içeriği kriptografik olarak güvenlidir</li>
+                    <li>Şifre sıfırlama sırasında bu dosyayı yükleyerek şifrenizi sıfırlayabilirsiniz</li>
+                </ul>
+                <p style="color: #d35400; margin-top: 15px; font-weight: bold;">
+                    ⚠️ Bu dosyayı kaybederseniz hesabınıza erişemezsiniz!
+                </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); padding: 20px; border-radius: 15px; margin: 20px 0; color: white;">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Önemli Uyarılar
+                </h3>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>En az bir kurtarma yöntemi seçmelisiniz!</strong> (Hepsini seçebilirsiniz)</li>
+                    <li>Kurtarma bilgilerinizi güvenli bir yerde saklayın (güvenli bir dosya, yazdırılmış kopya vb.)</li>
+                    <li>Kurtarma bilgilerinizi kaybederseniz hesabınıza erişemezsiniz</li>
+                    <li><strong>Şifre sıfırlandığında, güvenlik nedeniyle tüm kayıtlı şifreleriniz silinir</strong></li>
+                    <li>Şifre sıfırlama sonrası yeni şifreler eklemeniz gerekecek</li>
+                </ul>
+            </div>
+
+            <h3 style="color: #2a2a72; margin-top: 30px; margin-bottom: 15px;">Şifre Sıfırlama Adımları</h3>
+            <ol style="margin-left: 20px; color: #555; line-height: 2;">
+                <li>"Şifremi Unuttum" sayfasına gidin</li>
+                <li>Kullanıcı adınızı veya e-posta adresinizi girin</li>
+                <li>Mevcut kurtarma yöntemlerinizden birini seçin</li>
+                <li>Seçtiğiniz yönteme göre doğrulama yapın:
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>Güvenlik Soruları:</strong> 3 soruyu da doğru cevaplayın</li>
+                        <li><strong>Kurtarma Anahtarı:</strong> Anahtarınızı girin</li>
+                        <li><strong>Anahtar Dosyası:</strong> Dosyanızı yükleyin</li>
+                    </ul>
+                </li>
+                <li>Yeni şifrenizi belirleyin</li>
+                <li>Giriş yapın ve yeni şifreler ekleyin</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-cog"></i> Yapılandırma</h2>
+            <p>
+                Uygulama, <code>.env</code> dosyası üzerinden yapılandırılır. Bu dosya kurulum sırasında otomatik olarak oluşturulur.
+            </p>
+            <div class="installation-steps" style="margin-top: 20px;">
+                <p><strong>Yapılandırma Dosyası (.env):</strong></p>
+                <ul style="margin-left: 20px; color: #555;">
+                    <li><code>SECRET_KEY</code>: Flask uygulaması için gizli anahtar</li>
+                    <li><code>APP_SALT</code>: Şifreleme için kullanılan salt değeri</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Önemli:</strong> Production kullanımı için bu değerleri mutlaka değiştirin!</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-shield-alt"></i> Güvenlik</h2>
+            <p>
+                WSY, kullanıcı verilerinin güvenliğini en üst seviyede tutmak için çeşitli güvenlik önlemleri içerir:
+            </p>
+            <ul style="margin-left: 20px; color: #555; margin-top: 15px;">
+                <li><strong>End-to-End Şifreleme:</strong> Tüm şifreler kullanıcının ana şifresi ile türetilen anahtarlar kullanılarak şifrelenir</li>
+                <li><strong>PBKDF2:</strong> Ana şifre türetme için PBKDF2 algoritması kullanılır (100.000 iterasyon)</li>
+                <li><strong>Fernet Şifreleme:</strong> Şifreler için Fernet symmetric encryption kullanılır</li>
+                <li><strong>Hesap Kilitleme:</strong> Yanlış giriş denemelerine karşı otomatik hesap kilitleme</li>
+                <li><strong>Yerel Veri Saklama:</strong> Tüm veriler yerel SQLite veritabanında saklanır</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-question-circle"></i> Destek</h2>
+            <p>
+                Sorularınız veya sorunlarınız için GitHub repository'sinde issue açabilir veya proje geliştiricisi ile iletişime geçebilirsiniz.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2><i class="fas fa-rocket"></i> Hızlı Başlangıç</h2>
+            <div class="installation-steps">
+                <ol>
+                    <li>Projeyi GitHub'dan indirin veya ZIP olarak indirin</li>
+                    <li><code>kurulum.bat</code> dosyasını çalıştırın (Python kontrolü, virtual environment oluşturma, bağımlılık yükleme vb.)</li>
+                    <li>Kurulum tamamlandıktan sonra <code>WSY.bat</code> dosyasını çalıştırın</li>
+                    <li>Tarayıcınızda <code>http://127.0.0.1:5000</code> adresinde uygulama açılacaktır</li>
+                    <li>Yeni bir hesap oluşturun:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Kullanıcı adınızı girin (sistem otomatik olarak müsait olup olmadığını kontrol eder)</li>
+                            <li>E-posta adresinizi girin</li>
+                            <li>Güçlü bir ana şifre oluşturun</li>
+                            <li>En az bir kurtarma yöntemi seçin</li>
+                        </ul>
+                    </li>
+                    <li>Şifrelerinizi yönetmeye başlayın!</li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Ana Sayfaya Dön
+            </a>
+            <a href="https://github.com" class="btn btn-secondary" target="_blank">
+                <i class="fab fa-github"></i>
+                GitHub'da Görüntüle
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 WSY - Web Şifre Yöneticisi. Tüm hakları saklıdır.</p>
+            <p style="margin-top: 10px; font-size: 14px;">
+                Geliştirildi <i class="fas fa-heart" style="color: #e74c3c;"></i> ile
+            </p>
+            <p style="margin-top: 10px; font-size: 12px; opacity: 0.7;">
+                Daha fazla bilgi için README.md dosyasını inceleyebilirsiniz.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
+

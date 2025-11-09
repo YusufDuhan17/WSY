@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt Ol - Şifre Yöneticisi{% endblock %}
+
+{% block head_extra %}
+<style>
+    .recovery-methods-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    .recovery-method-option {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .recovery-method-option:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+    .recovery-method-option.selected {
+        background: rgba(0, 102, 255, 0.2);
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+    }
+    .recovery-method-option input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    .security-questions-form {
+        margin-top: 15px;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        display: none;
+    }
+    .security-questions-form.show {
+        display: block;
+    }
+    .security-question-item {
+        margin: 15px 0;
+    }
+    .security-question-item select,
+    .security-question-item input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        margin-top: 5px;
+    }
+    .security-question-item select option {
+        background: #2a2a72;
+        color: white;
+    }
+    .info-box {
+        background: rgba(241, 196, 15, 0.2);
+        border-left: 4px solid #f1c40f;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        color: white;
+    }
+    .recovery-key-display {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 1.2em;
+        text-align: center;
+        letter-spacing: 2px;
+        margin: 10px 0;
+        display: none;
+    }
+    .recovery-key-display.show {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <header class="content-header">
+        <h1>Kayıt Ol</h1>
+        <p>Yeni hesap oluşturun ve şifrelerinizi güvenle saklayın</p>
+    </header>
+    
+    <form method="POST" action="{{ url_for('register') }}" class="content-form" id="register-form">
+        <h2>Hesap Bilgileri</h2>
+        
+        <label for="username">Kullanıcı Adı:</label>
+        <input type="text" id="username" name="username" required placeholder="Kullanıcı adınızı girin" 
+               oninput="checkUsernameAvailability(this.value)">
+        <div id="username-feedback" style="margin-top: 5px; font-size: 0.9em;"></div>
+        
+        <label for="email">E-posta:</label>
+        <input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
+               title="Geçerli bir e-posta adresi girin." placeholder="E-posta adresinizi girin">
+        
+        <label for="password">Şifre:</label>
+        <input type="password" id="password" name="password" required 
+               placeholder="Güçlü bir şifre oluşturun (min. 8 karakter)" 
+               oninput="updatePasswordStrength()">
+        <div id="password-strength-indicator" style="margin-top: 10px;"></div>
+
+        <div class="recovery-methods-section">
+            <h3 style="color: white; margin-bottom: 20px;">
+                <i class="fas fa-shield-alt"></i> Şifre Sıfırlama Yöntemleri
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">
+                <strong>⚠️ ÖNEMLİ:</strong> En az bir kurtarma yöntemi seçmelisiniz! 
+                Şifrenizi unuttuğunuzda hesabınıza erişmek için bu yöntemlerden birini kullanacaksınız.
+            </p>
+
+            <!-- Güvenlik Soruları -->
+            <div class="recovery-method-option" onclick="handleRecoveryMethodClick(event, 'security_questions')">
+                <label style="display: flex; align-items: center; cursor: pointer; color: white;">
+                    <input type="checkbox" name="recovery_methods" value="security_questions" 
+                           id="recovery_security_questions" onchange="toggleSecurityQuestions()"
+                           onclick="event.stopPropagation()">
+                    <div style="flex: 1;" onclick="event.stopPropagation()">
+                        <strong style="font-size: 1.1em;">
+                            <i class="fas fa-question-circle"></i> Güvenlik Soruları
+                        </strong>
+                        <p style="margin: 5px 0; color: rgba(255, 255, 255, 0.8); font-size: 0.9em;">
+                            3 güvenlik sorusu seçin ve cevaplayın. Şifre sıfırlama sırasında hepsini doğru cevaplamanız gerekecek.
+                        </p>
+                    </div>
+                </label>
+                
+                <div class="security-questions-form" id="security_questions_form" onclick="event.stopPropagation()">
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Not:</strong> Güvenlik sorularının cevapları büyük/küçük harf duyarsızdır. 
+                        Cevaplarınızı unutmayın!
+                    </div>
+                    {% for i in range(1, 4) %}
+                    <div class="security-question-item" onclick="event.stopPropagation();">
+                        <label style="color: white; display: block; margin-bottom: 5px;">
+                            Güvenlik Sorusu {{ i }}:
+                        </label>
+                        <select name="security_question_{{ i }}" id="security_question_{{ i }}" required
+                                onmousedown="event.stopPropagation();"
+                                onclick="event.stopPropagation();"
+                                onfocus="event.stopPropagation();"
+                                onchange="event.stopPropagation();">
+                            <option value="">-- Soru Seçin --</option>
+                            {% for category in security_questions_categories %}
+                                <optgroup label="{{ category.category }}">
+                                    {% for question in category.questions %}
+                                        <option value="{{ question }}">{{ question }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                        <input type="text" name="security_answer_{{ i }}" 
+                               placeholder="Cevabınızı girin" required 
+                               style="margin-top: 10px;"
+                               onmousedown="event.stopPropagation();"
+                               onclick="event.stopPropagation();"
+                               onfocus="event.stopPropagation();"
+                               onkeydown="event.stopPropagation();">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recovery Key -->
+            <div class="recovery-method-option" onclick="handleRecoveryMethodClick(event, 'recovery_key')">
+                <label style="display: flex; align-items: center; cursor: pointer; color: white;">
+                    <input type="checkbox" name="recovery_methods" value="recovery_key" 
+                           id="recovery_recovery_key" onchange="toggleRecoveryKey()"
+                           onclick="event.stopPropagation()">
+                    <div style="flex: 1;" onclick="event.stopPropagation()">
+                        <strong style="font-size: 1.1em;">
+                            <i class="fas fa-key"></i> Kurtarma Anahtarı (Recovery Key)
+                        </strong>
+                        <p style="margin: 5px 0; color: rgba(255, 255, 255, 0.8); font-size: 0.9em;">
+                            Benzersiz bir kurtarma anahtarı oluşturulacak. Bu anahtarı güvenli bir yerde saklayın!
+                        </p>
+                    </div>
+                </label>
+                <div class="info-box" id="recovery_key_info" style="display: none;" onclick="event.stopPropagation()">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>Uyarı:</strong> Kurtarma anahtarınız kayıt sonrası gösterilecek. 
+                    Lütfen mutlaka not edin veya yazdırın! Bu anahtarı kaybederseniz hesabınıza erişemezsiniz.
+                </div>
+            </div>
+
+            <!-- Key File -->
+            <div class="recovery-method-option" onclick="handleRecoveryMethodClick(event, 'key_file')">
+                <label style="display: flex; align-items: center; cursor: pointer; color: white;">
+                    <input type="checkbox" name="recovery_methods" value="key_file" 
+                           id="recovery_key_file" onchange="toggleKeyFile()"
+                           onclick="event.stopPropagation()">
+                    <div style="flex: 1;" onclick="event.stopPropagation()">
+                        <strong style="font-size: 1.1em;">
+                            <i class="fas fa-file-alt"></i> Anahtar Dosyası (Key File)
+                        </strong>
+                        <p style="margin: 5px 0; color: rgba(255, 255, 255, 0.8); font-size: 0.9em;">
+                            Güvenli bir JSON dosyası oluşturulacak. Bu dosyayı güvenli bir yerde saklayın!
+                        </p>
+                    </div>
+                </label>
+                <div class="info-box" id="key_file_info" style="display: none;" onclick="event.stopPropagation()">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>Uyarı:</strong> Key file'ınız kayıt sonrası indirilecek. 
+                    Lütfen mutlaka güvenli bir yerde saklayın! Bu dosyayı kaybederseniz hesabınıza erişemezsiniz.
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="button primary-button" style="margin-top: 20px;">
+            <i class="fas fa-user-plus"></i> Kayıt Ol
+        </button>
+        <p style="text-align: center; margin-top: 15px;">
+            Zaten bir hesabın var mı? <a href="{{ url_for('login') }}" style="color: #f1c40f;">Giriş Yap</a>
+        </p>
+    </form>
+
+    <script>
+        function handleRecoveryMethodClick(event, method) {
+            // Eğer tıklama form elemanlarına (select, input) yapıldıysa, işlemi durdur
+            const target = event.target;
+            if (target.tagName === 'SELECT' || 
+                target.tagName === 'INPUT' || 
+                target.tagName === 'OPTION' ||
+                target.closest('select') ||
+                target.closest('input[type="text"]') ||
+                target.closest('.security-questions-form') ||
+                target.closest('.info-box')) {
+                return; // Event propagation zaten durduruldu ama yine de kontrol ediyoruz
+            }
+            
+            // Checkbox'a doğrudan tıklanmadıysa toggle yap
+            const checkbox = document.getElementById('recovery_' + method);
+            if (target !== checkbox) {
+                // Checkbox'ı toggle et
+                checkbox.checked = !checkbox.checked;
+                
+                // İlgili fonksiyonu çağır
+                if (method === 'security_questions') {
+                    toggleSecurityQuestions();
+                } else if (method === 'recovery_key') {
+                    toggleRecoveryKey();
+                } else if (method === 'key_file') {
+                    toggleKeyFile();
+                }
+                
+                updateRecoveryMethodStyle();
+            }
+        }
+        
+        function toggleRecoveryMethod(method) {
+            const checkbox = document.getElementById('recovery_' + method);
+            checkbox.checked = !checkbox.checked;
+            
+            if (method === 'security_questions') {
+                toggleSecurityQuestions();
+            } else if (method === 'recovery_key') {
+                toggleRecoveryKey();
+            } else if (method === 'key_file') {
+                toggleKeyFile();
+            }
+            
+            updateRecoveryMethodStyle();
+        }
+
+        function toggleSecurityQuestions() {
+            const checkbox = document.getElementById('recovery_security_questions');
+            const form = document.getElementById('security_questions_form');
+            const inputs = form.querySelectorAll('select, input');
+            
+            if (checkbox.checked) {
+                form.classList.add('show');
+                inputs.forEach(input => input.required = true);
+            } else {
+                form.classList.remove('show');
+                inputs.forEach(input => {
+                    input.required = false;
+                    input.value = '';
+                });
+            }
+            updateRecoveryMethodStyle();
+        }
+
+        function toggleRecoveryKey() {
+            const checkbox = document.getElementById('recovery_recovery_key');
+            const info = document.getElementById('recovery_key_info');
+            if (checkbox.checked) {
+                info.style.display = 'block';
+            } else {
+                info.style.display = 'none';
+            }
+            updateRecoveryMethodStyle();
+        }
+
+        function toggleKeyFile() {
+            const checkbox = document.getElementById('recovery_key_file');
+            const info = document.getElementById('key_file_info');
+            if (checkbox.checked) {
+                info.style.display = 'block';
+            } else {
+                info.style.display = 'none';
+            }
+            updateRecoveryMethodStyle();
+        }
+
+        let usernameCheckTimeout;
+        
+        function checkUsernameAvailability(username) {
+            // Önceki timeout'u temizle
+            clearTimeout(usernameCheckTimeout);
+            
+            const feedbackDiv = document.getElementById('username-feedback');
+            const usernameInput = document.getElementById('username');
+            
+            if (!username || username.trim().length === 0) {
+                feedbackDiv.innerHTML = '';
+                usernameInput.style.borderColor = '';
+                return;
+            }
+            
+            if (username.length < 3) {
+                feedbackDiv.innerHTML = '<span style="color: #f39c12;"><i class="fas fa-exclamation-triangle"></i> Kullanıcı adı en az 3 karakter olmalıdır</span>';
+                usernameInput.style.borderColor = '#f39c12';
+                return;
+            }
+            
+            // Debounce: Kullanıcı yazmayı bitirdikten 500ms sonra kontrol et
+            usernameCheckTimeout = setTimeout(() => {
+                feedbackDiv.innerHTML = '<span style="color: #3498db;"><i class="fas fa-spinner fa-spin"></i> Kontrol ediliyor...</span>';
+                usernameInput.style.borderColor = '#3498db';
+                
+                fetch('/check_username', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username: username })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.available) {
+                        feedbackDiv.innerHTML = '<span style="color: #2ecc71;"><i class="fas fa-check-circle"></i> ' + data.message + '</span>';
+                        usernameInput.style.borderColor = '#2ecc71';
+                    } else {
+                        feedbackDiv.innerHTML = '<span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> ' + data.message + '</span>';
+                        usernameInput.style.borderColor = '#e74c3c';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    feedbackDiv.innerHTML = '<span style="color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Kontrol edilemedi. Lütfen tekrar deneyin.</span>';
+                    usernameInput.style.borderColor = '#e74c3c';
+                });
+            }, 500);
+        }
+        
+        function updateRecoveryMethodStyle() {
+            document.querySelectorAll('.recovery-method-option').forEach(option => {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function updatePasswordStrength() {
+            const password = document.getElementById('password').value;
+            const indicator = document.getElementById('password-strength-indicator');
+            
+            if (!password) {
+                indicator.innerHTML = '';
+                return;
+            }
+            
+            const result = window.checkPasswordStrengthFrontend(password);
+            indicator.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="color: ${result.color}; font-weight: bold;">Şifre Gücü: ${result.strength}</span>
+                    <progress value="${result.strength === 'Zayıf' ? 25 : result.strength === 'Orta' ? 50 : result.strength === 'Güçlü' ? 75 : 100}" 
+                              max="100" style="width: 150px; height: 8px;"></progress>
+                </div>
+            `;
+        }
+
+        // Form gönderilmeden önce kontrol
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            const checkedMethods = document.querySelectorAll('input[name="recovery_methods"]:checked');
+            if (checkedMethods.length === 0) {
+                e.preventDefault();
+                alert('⚠️ En az bir kurtarma yöntemi seçmelisiniz!');
+                return false;
+            }
+        });
+    </script>
+{% endblock %}
