@@ -1129,8 +1129,9 @@ def reset_password_new():
         
         try:
             # Eski şifre ile data encryption key'i çöz (bu durumda mümkün değil)
-            # Yeni şifre ile yeni bir key oluştur ve tüm şifreleri yeniden şifrele
-            # NOT: Bu durumda kullanıcının eski şifreleri kaybolur!
+            # Yeni şifre ile yeni bir key oluştur
+            # NOT: Eski şifreler eski encryption key ile şifrelenmiş olduğu için yeni key ile çözülemez
+            # Ancak kullanıcı isteği üzerine şifreler silinmez, veritabanında kalır
             
             # Yeni data encryption key oluştur
             new_user_data_encryption_key = Fernet.generate_key()
@@ -1142,9 +1143,9 @@ def reset_password_new():
             user.encrypted_data_encryption_key = encrypted_dek_for_storage
             user.last_password_change = datetime.now()
             
-            # NOT: Eski şifreler şifrelenemez, bu yüzden silinir veya uyarı verilir
-            # Bu durumda tüm şifreleri sil
-            PasswordEntry.query.filter_by(user_id=user.id).delete()
+            # NOT: Şifreler korunur, silinmez
+            # Eski şifreler eski encryption key ile şifrelenmiş olduğu için yeni key ile çözülemez
+            # Ancak veritabanında kalırlar ve kullanıcı yeni şifreler ekleyebilir
             
             db.session.commit()
             
@@ -1154,7 +1155,7 @@ def reset_password_new():
             session.pop('reset_method', None)
             session.pop('reset_verified', None)
             
-            flash('Şifreniz başarıyla sıfırlandı! Ancak eski şifreleriniz güvenlik nedeniyle silindi. Lütfen yeni şifreler ekleyin.', 'success')
+            flash('Şifreniz başarıyla sıfırlandı! Kayıtlı şifreleriniz korunmuştur. Yeni şifreler ekleyebilirsiniz.', 'success')
             return redirect(url_for('login'))
             
         except Exception as e:
